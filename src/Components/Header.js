@@ -3,6 +3,7 @@ import styled from "styled-components";
 import SearchIcon from "@material-ui/icons/Search";
 import ShoppingBasketIcon from "@material-ui/icons/ShoppingBasket";
 import LocationOnIcon from "@material-ui/icons/LocationOn";
+import { Link } from "react-router-dom";
 
 const Container = styled.div`
   height: 60px;
@@ -74,8 +75,13 @@ const HeaderOption = styled.div`
 
 const HeaderOptionCart = styled.div`
   display: flex;
-  align-items: center;
-  padding-right: 9px;
+  a {
+    display: flex;
+    align-items: center;
+    padding-right: 9px;
+    color: #ffffff;
+    text-decoration: none;
+  }
 `;
 
 const CartCount = styled.div`
@@ -86,10 +92,12 @@ function Header() {
   return (
     <Container>
       <HeaderLogo>
-        <img
-          src="https://mikekitko.com/wp-content/uploads/2019/10/amazon-logo-white-768x232.png"
-          alt=""
-        />
+        <Link to="/">
+          <img
+            src="https://mikekitko.com/wp-content/uploads/2019/10/amazon-logo-white-768x232.png"
+            alt=""
+          />
+        </Link>
       </HeaderLogo>
       <HeaderOptionAddress>
         <LocationOnIcon />
@@ -118,8 +126,10 @@ function Header() {
         </HeaderOption>
 
         <HeaderOptionCart>
-          <ShoppingBasketIcon />
-          <CartCount>5</CartCount>
+          <Link to="/cart">
+            <ShoppingBasketIcon />
+            <CartCount>5</CartCount>
+          </Link>
         </HeaderOptionCart>
       </HeaderNavItems>
     </Container>
