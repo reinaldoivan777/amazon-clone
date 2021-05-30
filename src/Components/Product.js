@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { db } from "../firebase";
 
 const Container = styled.div`
   background-color: #ffffff;
@@ -21,7 +22,9 @@ const Price = styled.span`
   margin-top: 3px;
 `;
 
-const Rating = styled.div``;
+const Rating = styled.div`
+  display: flex;
+`;
 
 const ProductImage = styled.img`
   max-height: 200px;
@@ -35,6 +38,7 @@ const AddToCartButton = styled.button`
   border: 2px solid #a88734;
   border-radius: 2px;
   height: 30px;
+  cursor: pointer;
 `;
 
 const ActionSection = styled.div`
@@ -43,18 +47,41 @@ const ActionSection = styled.div`
   margin-top: 12px;
 `;
 
-function Product() {
+function Product(props) {
+  const { title, price, rating, image, id } = props;
+
+  const addToCart = () => {
+    const cartItem = db.collection("cartItems").doc(id);
+    cartItem.get().then((doc) => {
+      if (doc.exists) {
+        cartItem.update({
+          quantity: doc.data().quantity + 1,
+        });
+      } else {
+        db.collection("cartItems").doc(id).set({
+          name: title,
+          image: image,
+          price: price,
+          quantity: 1,
+        });
+      }
+    });
+  };
+
   return (
     <Container>
-      <Title>Ipad Pro</Title>
-      <Price>$ 1,449</Price>
-      <Rating>⭐⭐⭐⭐⭐</Rating>
-      <ProductImage
-        src="https://d2pa5gi5n2e1an.cloudfront.net/webp/global/images/product/tablets/Apple_iPad_Pro_12_9_2020_/Apple_iPad_Pro_12_9_2020__L_1.jpg"
-        alt=""
-      />
+      <Title>{title}</Title>
+      <Price>${price}</Price>
+      <Rating>
+        {Array(rating)
+          .fill()
+          .map((star, index) => (
+            <span key={index}>⭐</span>
+          ))}
+      </Rating>
+      <ProductImage src={image} alt="" />
       <ActionSection>
-        <AddToCartButton>Add to Cart</AddToCartButton>
+        <AddToCartButton onClick={addToCart}>Add to Cart</AddToCartButton>
       </ActionSection>
     </Container>
   );
