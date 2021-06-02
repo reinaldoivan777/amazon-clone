@@ -23,6 +23,13 @@ const Content = styled.div`
   flex-wrap: wrap;
 `;
 
+const MiniThumbnail = styled.div`
+  padding: 0 10px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+`;
+
 function Home() {
   const [products, setProducts] = useState([]);
 
@@ -48,17 +55,35 @@ function Home() {
     <Container>
       <Banner />
       <Content>
-        {products.map((data) => (
-          <Product
-            key={data.id}
-            title={data.product.name}
-            price={data.product.price}
-            rating={data.product.rating}
-            image={data.product.image}
-            id={data.id}
-          />
-        ))}
+        {products
+          .filter((data) => !data.product.miniThumbnail)
+          .map((data) => (
+            <Product
+              key={data.id}
+              title={data.product.name}
+              price={data.product.price}
+              rating={data.product.rating}
+              image={data.product.image}
+              miniThumbnail={data.product.miniThumbnail}
+              id={data.id}
+            />
+          ))}
       </Content>
+      <MiniThumbnail>
+        {products
+          .filter((data) => data.product.miniThumbnail)
+          .map((data) => (
+            <Product
+              key={data.id}
+              title={data.product.name}
+              price={data.product.price}
+              rating={data.product.rating}
+              image={data.product.image}
+              miniThumbnail={data.product.miniThumbnail}
+              id={data.id}
+            />
+          ))}
+      </MiniThumbnail>
     </Container>
   );
 }

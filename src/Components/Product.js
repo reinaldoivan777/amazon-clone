@@ -1,11 +1,10 @@
 import React from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { db } from "../firebase";
 
 const Container = styled.div`
   background-color: #ffffff;
   z-index: 100;
-  flex: 1;
   padding: 20px;
   margin: 10px;
   max-height: 400px;
@@ -13,6 +12,15 @@ const Container = styled.div`
   flex-direction: column;
   margin-bottom: 12px;
   border-radius: 4px;
+
+  ${(props) =>
+    !props.thumbnail
+      ? css`
+          flex: 1;
+        `
+      : css`
+          width: 300px;
+        `}
 `;
 
 const Title = styled.span``;
@@ -48,7 +56,7 @@ const ActionSection = styled.div`
 `;
 
 function Product(props) {
-  const { title, price, rating, image, id } = props;
+  const { title, price, rating, image, miniThumbnail, id } = props;
 
   const addToCart = () => {
     const cartItem = db.collection("cartItems").doc(id);
@@ -69,7 +77,7 @@ function Product(props) {
   };
 
   return (
-    <Container>
+    <Container thumbnail={miniThumbnail}>
       <Title>{title}</Title>
       <Price>${price}</Price>
       <Rating>
